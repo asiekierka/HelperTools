@@ -7,10 +7,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class Debug_States extends Item{
@@ -35,28 +35,28 @@ public class Debug_States extends Item{
 		String posi = "" + pos;
 		String blockid = "#: " + BlockStateHelper.returnBlock_ID(BlockStateHelper.returnID(world, pos));
 		
-		ChatComponentTranslation chatmessy2 = new ChatComponentTranslation(
-				EnumChatFormatting.WHITE+ posi 
-				+EnumChatFormatting.YELLOW+ Local, new Object[0]);
+		TextComponentTranslation chatmessy2 = new TextComponentTranslation(
+				TextFormatting.WHITE+ posi
+				+TextFormatting.YELLOW+ Local, new Object[0]);
 		theplayer.addChatComponentMessage(chatmessy2);
-		ChatComponentTranslation chatmessy1 = new ChatComponentTranslation(EnumChatFormatting.GRAY + State, new Object[0]);
-		theplayer.addChatComponentMessage(chatmessy1);		
+		TextComponentTranslation chatmessy1 = new TextComponentTranslation(TextFormatting.GRAY + State, new Object[0]);
+		theplayer.addChatComponentMessage(chatmessy1);
 		
-		ChatComponentTranslation chatmessy = new ChatComponentTranslation(
-				//EnumChatFormatting.GRAY +
+		TextComponentTranslation chatmessy = new TextComponentTranslation(
+				//TextFormatting.GRAY +
 				//Messy + " "+
 				blockid+ " "+
-				EnumChatFormatting.GREEN +Meta + " "+
-				EnumChatFormatting.BLUE +ID + " "+
-				EnumChatFormatting.RED + Unlocal
+				TextFormatting.GREEN +Meta + " "+
+				TextFormatting.BLUE +ID + " "+
+				TextFormatting.RED + Unlocal
 				
 				, new Object[0]);
 		(theplayer).addChatComponentMessage(chatmessy);
 		
 		/**
-		ChatComponentTranslation chatmessy2 = new ChatComponentTranslation(
-				EnumChatFormatting.GRAY + "" + world, new Object[0]);
-		theplayer.addChatComponentMessage(chatmessy2);
+		TextComponentTranslation chatmessy2 = new TextComponentTranslation(
+				TextFormatting.GRAY + "" + world, new Object[0]);
+		theplayer.addTextComponentMessage(chatmessy2);
 		**/
 		 //}
 		 

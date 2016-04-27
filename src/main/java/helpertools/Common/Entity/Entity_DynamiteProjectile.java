@@ -21,10 +21,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -61,7 +61,7 @@ public class Entity_DynamiteProjectile extends EntityThrowable{
    
    /** Called whenever the entities hitbox touches another box, being an entitie's or block. **/
    @Override
-  protected void onImpact(MovingObjectPosition mop) {
+  protected void onImpact(RayTraceResult mop) {
 	   
 	   if (this.worldObj.isRemote){ return;}	  
 	      

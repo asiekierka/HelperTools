@@ -23,12 +23,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ItemStaffofTransformation extends ToolBase_Default
@@ -47,7 +46,7 @@ public class ItemStaffofTransformation extends ToolBase_Default
     @Override
     public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
     {
-    	par3List.add(EnumChatFormatting.ITALIC + "swaps blocks");
+    	par3List.add(TextFormatting.ITALIC + "swaps blocks");
     	if (stack.hasTagCompound()){
     if(whatBlockString(stack) != "null" && whatModeString(stack)!= "null"){
     	par3List.add(whatBlockString(stack) + whatModeString(stack)+ " mode");
@@ -78,7 +77,7 @@ public class ItemStaffofTransformation extends ToolBase_Default
   	};
    
 	
-	private Block Gblock = Blocks.air;	
+	private Block Gblock = Blocks.AIR;
 	private int Gmeta = 0;	
 	
 	
@@ -123,7 +122,7 @@ public class ItemStaffofTransformation extends ToolBase_Default
 			//config hook
 			
 			if(ConfigurationFactory.ToolModeMesseges){	    
-			ChatComponentTranslation chatmessy = new ChatComponentTranslation(EnumChatFormatting.GRAY + Messy, new Object[0]);
+			TextComponentTranslation chatmessy = new TextComponentTranslation(TextFormatting.GRAY + Messy, new Object[0]);
 			((EntityPlayer) entityLiving).addChatComponentMessage(chatmessy);
 		    }
 			
@@ -146,9 +145,9 @@ public class ItemStaffofTransformation extends ToolBase_Default
 		if(theplayer.capabilities.isCreativeMode || theplayer.inventory.hasItemStack(stacky))
   		{	
 			world.playSoundEffect((double)((float)x2 + 0.5F), (double)((float)y2 + 0.5F), (double)((float)z2 + 0.5F), 
-   				 returnTBlock(thestaff).stepSound.getStepSound(), 
-   				 (returnTBlock(thestaff).stepSound.getVolume() + 1.0F) / 2.0F, 
-   				 returnTBlock(thestaff).stepSound.getFrequency() * 0.8F);
+   				 returnTBlock(thestaff).getSoundType().getStepSound(),
+   				 (returnTBlock(thestaff).getSoundType().getVolume() + 1.0F) / 2.0F,
+   				 returnTBlock(thestaff).getSoundType().getPitch() * 0.8F);
 			(world.getBlockState(pos2).getBlock()).dropBlockAsItem(world, pos2, world.getBlockState(pos2), 0);
       		//Gblock.dropBlockAsItem(theblock, x2, y2, z2, Gmeta, 0);
       		//theblock.setBlock(x2, y2, z2, Blocks.air);
@@ -213,11 +212,11 @@ public class ItemStaffofTransformation extends ToolBase_Default
 		/**      ~~~~~~~~      Small Mode       ~~~~~~~~             **/
 		////////////////////////////////////////////////////////////////
 		/** if this is true it performs this action **/
-		if (!theplayer.isSneaking() && (returnTBlock_FromState(thestaff)) != Blocks.air    			
-      			&& !theplayer.capabilities.isCreativeMode && Gblock != Blocks.bedrock
+		if (!theplayer.isSneaking() && (returnTBlock_FromState(thestaff)) != Blocks.AIR
+      			&& !theplayer.capabilities.isCreativeMode && Gblock != Blocks.BEDROCK
       			&& getMode(thestaff) == 2
       					||
-      			!theplayer.isSneaking() && (returnTBlock_FromState(thestaff)) != Blocks.air    			
+      			!theplayer.isSneaking() && (returnTBlock_FromState(thestaff)) != Blocks.AIR
       			&& theplayer.capabilities.isCreativeMode
       			&& getMode(thestaff) == 2)
       	{ 

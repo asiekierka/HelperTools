@@ -10,9 +10,8 @@ import helpertools.Utils.HelpTab;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,11 +24,8 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -60,7 +56,6 @@ public class ItemTorchLauncher extends ToolBase_Crossbow{
    @Override
    @SideOnly(Side.CLIENT)
    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int ticksRemaining) {
-	   
 	 if (!stack.hasTagCompound()) {return Models_Crossbow.getInstance().getModel(0);} 
 	 int loaded = getTload(stack);
 	 if (loaded == 0){
@@ -83,8 +78,8 @@ public class ItemTorchLauncher extends ToolBase_Crossbow{
    @Override
    public void addInformation(ItemStack stack, EntityPlayer entity, List list, boolean par4)
    {
-	   list.add(EnumChatFormatting.ITALIC + "fires torches ");
-	   list.add(EnumChatFormatting.ITALIC + "& more");
+	   list.add(TextFormatting.ITALIC + "fires torches ");
+	   list.add(TextFormatting.ITALIC + "& more");
 	   if (stack.hasTagCompound()){
 		    if(whatModeString(stack) != "null"){
 		    	list.add(whatModeString(stack)+ " mode");
@@ -110,7 +105,7 @@ public class ItemTorchLauncher extends ToolBase_Crossbow{
 		
 		if(Loader.isModLoaded(Tcon))
 		 {			
-			 return ((EntityPlayer) entityLiving).inventory.hasItem(Item.getItemFromBlock(Block.getBlockFromName(TinkTorch)));
+			 return ((EntityPlayer) entityLiving).inventory.hasItemStack(new ItemStack(Block.getBlockFromName(TinkTorch)));
 			 
 			}
 		 else
@@ -121,7 +116,7 @@ public class ItemTorchLauncher extends ToolBase_Crossbow{
 		
 		if(Loader.isModLoaded(Tcon))
 		 {			
-			 return ((EntityPlayer)entityLiving).inventory.consumeInventoryItem(Item.getItemFromBlock(Block.getBlockFromName(TinkTorch)));
+			 return ((EntityPlayer)entityLiving).inventory.deleteStack(new ItemStack(Block.getBlockFromName(TinkTorch)));
 					 
 			}
 		 else

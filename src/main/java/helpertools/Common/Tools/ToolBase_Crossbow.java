@@ -6,21 +6,27 @@ import helpertools.Common.ItemRegistry;
 import helpertools.Common.Entity.Entity_DynamiteProjectile;
 import helpertools.Common.Entity.Entity_RedTorchProjectile;
 import helpertools.Common.Entity.Entity_TorchProjectile;
+import helpertools.Utils.InventoryUtil;
+import helpertools.Utils.SoundUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ToolBase_Crossbow extends ItemSpade{
@@ -31,9 +37,10 @@ public class ToolBase_Crossbow extends ItemSpade{
 		
 	
 	//Generic tool stuff
-		public boolean onBlockDestroyed(ItemStack stack, World world, Block theblock, BlockPos pos1, EntityLivingBase entity)
+	@Override
+		public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos1, EntityLivingBase entity)
 	    {
-	        if ((double)theblock.getBlockHardness(world, pos1) != 0.0D)
+	        if ((double)state.getBlock().getBlockHardness(state, world, pos1) != 0.0D)
 	        {
 	            stack.damageItem(4, entity);
 	        }
@@ -47,8 +54,10 @@ public class ToolBase_Crossbow extends ItemSpade{
 	    }
 		
 		@Override
-		   public boolean onItemUse(ItemStack thestaff, EntityPlayer theplayer, World world, BlockPos pos, EnumFacing theface, float fty1, float fty2, float fty3)
-			{return false;}
+		public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+			// TODO: Check me!
+			return EnumActionResult.PASS;
+		}
 		
 		/**Established nbt factors **/
 		public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isheld) {
@@ -108,10 +117,10 @@ public class ToolBase_Crossbow extends ItemSpade{
 	    };
 	    
 	    //Item Gallery
-	    Item torch = Item.getItemFromBlock(Blocks.torch);
-	    Item redstone = Item.getItemFromBlock(Blocks.redstone_torch);
-	    //Item dynamite = ItemRegistry.dynamitebolt; - doesn't register for some reason ¯\_(*-*)_/¯
-	    Item arrow = Items.arrow;
+	    Item torch = Item.getItemFromBlock(Blocks.TORCH);
+	    Item redstone = Item.getItemFromBlock(Blocks.REDSTONE_TORCH);
+	    //Item dynamite = ItemRegistry.dynamitebolt; - doesn't register for some reason ï¿½\_(*-*)_/ï¿½
+	    Item arrow = Items.ARROW;
 	    
 	    /** Checks inventory if specified mode's item exists **/
 	    public boolean is_Mode_Availible(ItemStack stack, EntityPlayer player, int mode) {
@@ -119,16 +128,16 @@ public class ToolBase_Crossbow extends ItemSpade{
 	    	if(mode>3){return false;}
 			switch (mode){
 			case 0:
-				if(player.inventory.hasItem(torch)){return true;}		
+				if(InventoryUtil.hasItem(torch, player.inventory)){return true;}
 			break;
 			case 1:
-				if(player.inventory.hasItem(redstone)){return true;}		
+				if(InventoryUtil.hasItem(redstone, player.inventory)){return true;}
 			break;
 			case 2:
-				if(player.inventory.hasItem(ItemRegistry.dynamitebolt)){return true;}		
+				if(InventoryUtil.hasItem(ItemRegistry.dynamitebolt, player.inventory)){return true;}
 			break;					
 			case 3:
-				if(player.inventory.hasItem(arrow)){return true;}				
+				if(InventoryUtil.hasItem(arrow, player.inventory)){return true;}
 			break;			
 			}
 			return false;
@@ -158,16 +167,16 @@ public class ToolBase_Crossbow extends ItemSpade{
 	    	 	switch(mode)
 				{
 					case 0:
-						player.inventory.consumeInventoryItem(torch);
+						InventoryUtil.consumeInventoryItem(torch, player.inventory);
 					break;
 					case 1:
-						player.inventory.consumeInventoryItem(redstone);	
+						InventoryUtil.consumeInventoryItem(redstone, player.inventory);
 					break;
 					case 2:
-						player.inventory.consumeInventoryItem(ItemRegistry.dynamitebolt);
+						InventoryUtil.consumeInventoryItem(ItemRegistry.dynamitebolt, player.inventory);
 					break;					
 					case 3:
-						player.inventory.consumeInventoryItem(arrow);
+						InventoryUtil.consumeInventoryItem(arrow, player.inventory);
 					break;		   
 				}
 				return;
@@ -228,9 +237,9 @@ public class ToolBase_Crossbow extends ItemSpade{
 	    /** Static special effect clause **/
 		public void Transfer_Effect(ItemStack stack, EntityPlayer player){
 	    	Float sound = Main.Randy.nextFloat()+ 5F; //1f
-	    	player.worldObj.playSoundAtEntity(player, "mob.chicken.plop", sound, 3.0F);	
+			SoundUtil.playSoundAtEntity(player, "mob.chicken.plop", sound, 3.0F);
 	    	if(ConfigurationFactory.ToolModeMesseges){
-			ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation(EnumChatFormatting.GRAY + whatModeString(stack)+" loaded", new Object[0]);
+			TextComponentTranslation chatcomponenttranslation = new TextComponentTranslation(TextFormatting.GRAY + whatModeString(stack)+" loaded", new Object[0]);
 			player.addChatComponentMessage(chatcomponenttranslation);
 	    	}
 	    }
@@ -239,7 +248,8 @@ public class ToolBase_Crossbow extends ItemSpade{
 	    /** fires the missle **/
 	    public void crossbow_FIRE(ItemStack stack,  World world, EntityPlayer player){
 	    	
-	    	EntityArrow entityarrow = new EntityArrow(world, player, 1 * 2.0F);
+	    	EntityArrow entityarrow = new EntityTippedArrow(world, player);
+			entityarrow.setDamage(1 * 2.0F);
 	    	float f = 6.0F;
 	        f = (f * f + f * 2.0F) / 3.0F;	    	
 	    	switch(getMode(stack))
@@ -257,7 +267,7 @@ public class ToolBase_Crossbow extends ItemSpade{
 					world.spawnEntityInWorld(entityarrow);
 				break;		   
 			}
-	    	 world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+	    	 SoundUtil.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 			 setTload(stack, 0);
 			 if(!player.capabilities.isCreativeMode){stack.damageItem(1, player);}
 	    	
@@ -267,13 +277,13 @@ public class ToolBase_Crossbow extends ItemSpade{
 	    	
 	    	if(player.capabilities.isCreativeMode){	    		
 	    		setTload(stack, 2);
-	    		world.playSoundAtEntity(player, "fire.ignite",.4F, itemRand.nextFloat() * 0.4F + 0.8F);	
+	    		SoundUtil.playSoundAtEntity(player, "fire.ignite",.4F, itemRand.nextFloat() * 0.4F + 0.8F);	
 	    		return;
 	    	}
 	    	else{
 	    		if(is_Mode_Availible(stack, player, getMode(stack))){	    			
 	    			setTload(stack, 2);
-	    			world.playSoundAtEntity(player, "fire.ignite",.4F, itemRand.nextFloat() * 0.4F + 0.8F);
+	    			SoundUtil.playSoundAtEntity(player, "fire.ignite",.4F, itemRand.nextFloat() * 0.4F + 0.8F);
 		    		consume_item(stack, player, getMode(stack));		    		
 		    		stack.damageItem(1, player);
 		    		return;
@@ -281,7 +291,7 @@ public class ToolBase_Crossbow extends ItemSpade{
 		    		
 	    		}	    		
 	    		else{
-	    			world.playSoundAtEntity(player, "fire.ignite",4F, itemRand.nextFloat() * 0.4F + 0.9F);
+	    			SoundUtil.playSoundAtEntity(player, "fire.ignite",4F, itemRand.nextFloat() * 0.4F + 0.9F);
 		   			return;
 		   			}
 	    	}

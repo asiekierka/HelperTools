@@ -1,6 +1,7 @@
 package helpertools.Common.Items;
 
 import helpertools.Utils.HelpTab;
+import helpertools.Utils.SoundUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -27,8 +28,8 @@ public class ItemMilkBottle extends Item
     	 if (!p_77654_2_.isRemote)
          {
              //p_77654_3_.curePotionEffects(p_77654_1_);
-    		 p_150910_2_.curePotionEffects(new ItemStack(Items.milk_bucket));
-    		 p_77654_2_.playSoundAtEntity(p_150910_2_, "random.burp", 0.5F, p_77654_2_.rand.nextFloat() * 0.1F + 0.9F);
+    		 p_150910_2_.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
+    		 SoundUtil.playSoundAtEntity(p_150910_2_, "random.burp", 0.5F, p_77654_2_.rand.nextFloat() * 0.1F + 0.9F);
              //p_77654_3_.setFire(0);
              //p_77654_3_.extinguish();             
          }
@@ -39,13 +40,13 @@ public class ItemMilkBottle extends Item
         }
         else if (--p_150910_1_.stackSize <= 0)
         {
-            return new ItemStack(Items.glass_bottle);
+            return new ItemStack(Items.GLASS_BOTTLE);
         }
         else
         {
-            if (!p_150910_2_.inventory.addItemStackToInventory(new ItemStack(Items.glass_bottle)))
+            if (!p_150910_2_.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE)))
             {
-                p_150910_2_.dropPlayerItemWithRandomChoice(new ItemStack(Items.glass_bottle, 1, 0), false);
+                p_150910_2_.dropItem(new ItemStack(Items.GLASS_BOTTLE, 1, 0), false);
             }
 
             return p_150910_1_;
@@ -73,7 +74,7 @@ public class ItemMilkBottle extends Item
      */
     public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
     {
-        p_77659_3_.setItemInUse(p_77659_1_, this.getMaxItemUseDuration(p_77659_1_));
+        p_77659_3_.set(p_77659_1_, this.getMaxItemUseDuration(p_77659_1_));
         return p_77659_1_;
     }
 }

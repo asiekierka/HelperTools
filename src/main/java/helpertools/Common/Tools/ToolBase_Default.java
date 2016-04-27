@@ -13,9 +13,9 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 
@@ -235,7 +235,7 @@ public class ToolBase_Default extends ItemSpade{
 			
 			 if(ConfigurationFactory.ToolPowerMesseges == true){	
 				 String Messy = ("Rank: "+(getToolLevel(itemStack)));
-					ChatComponentTranslation chatmessy = new ChatComponentTranslation(EnumChatFormatting.GRAY + Messy, new Object[0]);
+					TextComponentTranslation chatmessy = new TextComponentTranslation(TextFormatting.GRAY + Messy, new Object[0]);
 					((EntityPlayer) entityLiving).addChatComponentMessage(chatmessy);
 				    }
 				    

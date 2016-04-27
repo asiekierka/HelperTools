@@ -1,6 +1,7 @@
 package helpertools.Common.Items;
 
 import helpertools.Utils.HelpTab;
+import helpertools.Utils.SoundUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -27,22 +28,22 @@ public class ItemChocolateMilk extends ItemFood
     @Override
     public void onFoodEaten(ItemStack stack, World world, EntityPlayer player)
     {
-    	 if (!world.isRemote){player.curePotionEffects(new ItemStack(Items.milk_bucket));}
+    	 if (!world.isRemote){player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));}
     	 
         if (player.capabilities.isCreativeMode)
         {
         	//player.getFoodStats().addStats(this, stack);
-            world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+            SoundUtil.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
             //this.onFoodEaten(stack, world, player);
             return;
         }       
         else
         {        	
-            world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+            SoundUtil.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
             //if(--stack.stackSize <= 0)
-            if (!player.inventory.addItemStackToInventory(new ItemStack(Items.glass_bottle)))
+            if (!player.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE)))
             {
-            	player.dropPlayerItemWithRandomChoice(new ItemStack(Items.glass_bottle, 1, 0), false);
+            	player.dropItem(new ItemStack(Items.GLASS_BOTTLE, 1, 0), false);
             }            
             
             return;

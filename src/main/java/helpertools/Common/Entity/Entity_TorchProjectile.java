@@ -28,10 +28,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -109,7 +109,7 @@ public class Entity_TorchProjectile extends EntityThrowable{
    
    /** Called whenever the entities hitbox touches another box, being an entitie's or block. **/
    @Override
-  protected void onImpact(MovingObjectPosition mop) {
+  protected void onImpact(RayTraceResult mop) {
 	   
 	   if (this.worldObj.isRemote){ return;}
 	   if(mop.entityHit != null){
@@ -120,8 +120,8 @@ public class Entity_TorchProjectile extends EntityThrowable{
 	      EnumFacing sideHit = mop.sideHit; //face of a block
 	      World world = this.worldObj;
 	      BlockPos pos1 = mop.getBlockPos();
-	      Block P_Block = Blocks.torch;
-	      IBlockState P_State = Blocks.torch.getDefaultState();
+	      Block P_Block = Blocks.TORCH;
+	      IBlockState P_State = Blocks.TORCH.getDefaultState();
 	     
 	      
 	      Block_Impact(mop, world, pos1, sideHit, P_Block, P_State);	
@@ -131,7 +131,7 @@ public class Entity_TorchProjectile extends EntityThrowable{
    }
    
    /** Seperate Unit for entity processing **/
-   public void Entity_Impact(MovingObjectPosition mop){
+   public void Entity_Impact(RayTraceResult mop){
 	   
 	 //when it hits an entity do this
 	      if (mop.entityHit != null &&!(mop.entityHit instanceof EntityEnderman))
@@ -146,7 +146,7 @@ public class Entity_TorchProjectile extends EntityThrowable{
    }
    
    /** Seperate Unit for block impact processing **/
-   public void Block_Impact(MovingObjectPosition mop, World world, BlockPos pos1, EnumFacing sideHit, Block p_Block, IBlockState p_State) {
+   public void Block_Impact(RayTraceResult mop, World world, BlockPos pos1, EnumFacing sideHit, Block p_Block, IBlockState p_State) {
 	   BlockPos pos2 = pos1;
 	   
 	   switch(sideHit){
@@ -164,15 +164,19 @@ public class Entity_TorchProjectile extends EntityThrowable{
 		   break;
 	   default:
 		break;	   
-	   }	   
-	   if(world.getBlockState(pos1).getBlock().getMaterial() == Material.plants 
-				|| world.getBlockState(pos1).getBlock().getMaterial() == Material.vine 
-				|| world.getBlockState(pos1).getBlock() == Blocks.snow_layer){
+	   }
+
+	   IBlockState state1 = world.getBlockState(pos1);
+	   IBlockState state2 = world.getBlockState(pos2);
+
+	   if(state1.getMaterial() == Material.PLANTS
+			   || state1.getMaterial() == Material.VINE
+			   || state1.getBlock() == Blocks.SNOW_LAYER){
 		   drop_blockItem(world, pos1);
 		   //world.setBlockState(pos1, p_State, 02);
 		   boolean flag = false;
-		   if(world.getBlockState(pos1).getBlock().getMaterial() == Material.vine
-				   && !(world.getBlockState(pos1).getBlock() == Blocks.tallgrass)){
+		   if(state1.getMaterial() == Material.VINE
+				   && !(state1.getBlock() == Blocks.TALLGRASS)){
 			   flag = true;
 		   }
 		   place_block(world, pos1, sideHit, p_Block, flag);
@@ -180,9 +184,9 @@ public class Entity_TorchProjectile extends EntityThrowable{
 		   return;		   
 		   
 	   }
-	   if(world.getBlockState(pos2).getBlock().getMaterial() == Material.plants 
-				|| world.getBlockState(pos2).getBlock().getMaterial() == Material.vine 
-				|| world.getBlockState(pos2).getBlock() == Blocks.snow_layer){
+	   if(state2.getMaterial() == Material.PLANTS
+			   || state2.getMaterial() == Material.VINE
+			   || state2.getBlock() == Blocks.SNOW_LAYER){
 		   drop_blockItem(world, pos2);
 		   place_block(world, pos2, sideHit, p_Block, true);
 		   this.setDead();

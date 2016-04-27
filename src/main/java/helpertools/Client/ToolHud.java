@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -35,9 +34,8 @@ import net.minecraft.item.ItemGlassBottle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
@@ -143,7 +141,7 @@ public class ToolHud extends Gui
   @SubscribeEvent(priority = EventPriority.NORMAL)
   public void onRenderExperienceBar(RenderGameOverlayEvent event)
   {
-    if(event.isCancelable() || event.type != ElementType.EXPERIENCE)
+    if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE)
     {      
       return;
     }    
@@ -216,8 +214,8 @@ public class ToolHud extends Gui
   private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
   //private static final Vec3 Vector_B = Vec3.createVectorHelper(0.20000000298023224D, 1.0D, -0.699999988079071D).normalize();
   //private static final Vec3 Vector_C = Vec3.createVectorHelper(-0.20000000298023224D, 1.0D, 0.699999988079071D).normalize();
-  private static final Vec3 LIGHT0_POS = (new Vec3(0.20000000298023224D, 1.0D, -0.699999988079071D)).normalize();
-  private static final Vec3 LIGHT1_POS = (new Vec3(-0.20000000298023224D, 1.0D, 0.699999988079071D)).normalize();
+  private static final Vec3d LIGHT0_POS = (new Vec3d(0.20000000298023224D, 1.0D, -0.699999988079071D)).normalize();
+  private static final Vec3d LIGHT1_POS = (new Vec3d(-0.20000000298023224D, 1.0D, 0.699999988079071D)).normalize();
   private static final String __OBFID = "CL_00000629";
   @ Deprecated
   private static FloatBuffer setColorBuffer(float p_74521_0_, float p_74521_1_, float p_74521_2_, float p_74521_3_)

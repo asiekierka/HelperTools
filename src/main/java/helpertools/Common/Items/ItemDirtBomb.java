@@ -4,11 +4,15 @@ package helpertools.Common.Items;
 import helpertools.Common.ItemRegistry;
 import helpertools.Common.Entity.Entity_DirtBombProjectile;
 import helpertools.Utils.HelpTab;
+import helpertools.Utils.SoundUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class ItemDirtBomb extends Item {
@@ -25,14 +29,14 @@ public class ItemDirtBomb extends Item {
 	  
 	  
 	  @Override
-	   public ItemStack onItemRightClick(ItemStack stack, World world,
-	           EntityPlayer player) {
+	   public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world,
+													   EntityPlayer player, EnumHand hand) {
 	           
 	           float f = 6.0F;
        f = (f * f + f * 2.0F) / 3.0F;
        
        if( player.worldObj.isRemote){
-    	   return stack;
+    	   return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
        }
        if(!player.capabilities.isCreativeMode){--stack.stackSize;}
        //consumeInventoryItem(ItemRegistry.dirtbomb);
@@ -44,8 +48,8 @@ public class ItemDirtBomb extends Item {
        		//world.spawnEntityInWorld(Bomb);
        		
 	 
-       		world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-		   
-       		return stack;
+       		SoundUtil.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+
+		  return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	   }
 }

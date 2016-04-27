@@ -22,8 +22,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -40,7 +42,7 @@ public class TranscriberBlock extends Block implements ITileEntityProvider
 {
     public TranscriberBlock(String unlocalizedName)
     {
-        super(Material.clay);
+        super(Material.CLAY);
         this.setUnlocalizedName(unlocalizedName);
         this.setCreativeTab(HelpTab.HelperTools); 
         this.setHardness(0.6F);
@@ -104,7 +106,8 @@ public class TranscriberBlock extends Block implements ITileEntityProvider
                 	//(tileentityhopper).atck7 = 6;
             	if(!player.isSneaking()){
 
-            		worldIn.playSoundEffect((double)x1 + 0.5D, (double)y1 + 0.5D, (double)z1 + 0.5D, "random.click", 0.3F,   0.5F);
+            		worldIn.playSound(player, (double)x1 + 0.5D, (double)y1 + 0.5D, (double)z1 + 0.5D,
+							new SoundEvent(new ResourceLocation("random.click")), SoundCategory.MASTER, 0.3F,   0.5F);
             		
             	 switch(side){
 	    		 //Bottom 0
@@ -133,8 +136,10 @@ public class TranscriberBlock extends Block implements ITileEntityProvider
             	
             	//on off?
             	if(player.isSneaking()){
-            		worldIn.playSoundEffect((double)x1 + 0.5D, (double)y1 + 0.5D, (double)z1 + 0.5D, "random.click", 0.3F,   0.6F);
-            		//ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation((tile).offX +"X " + (tile).offY +"Y " + (tile).offZ +"Z ", new Object[0]);
+
+					worldIn.playSound(player, (double)x1 + 0.5D, (double)y1 + 0.5D, (double)z1 + 0.5D,
+							new SoundEvent(new ResourceLocation("random.click")), SoundCategory.MASTER, 0.3F,   0.6F);
+					//ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation((tile).offX +"X " + (tile).offY +"Y " + (tile).offZ +"Z ", new Object[0]);
             	   	// player.addChatComponentMessage(chatcomponenttranslation); 
             		
             	   //bottom / top

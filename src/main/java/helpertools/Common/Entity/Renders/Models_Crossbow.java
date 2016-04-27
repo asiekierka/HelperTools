@@ -1,7 +1,7 @@
 package helpertools.Common.Entity.Renders;
 
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import helpertools.Main;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 import java.util.ArrayList;
 

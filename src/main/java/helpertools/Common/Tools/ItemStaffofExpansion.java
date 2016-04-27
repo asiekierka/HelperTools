@@ -4,16 +4,17 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import helpertools.Common.ConfigurationFactory;
@@ -36,7 +37,7 @@ public class ItemStaffofExpansion extends ToolBase_Default
     @Override
     public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
     {
-    	par3List.add(EnumChatFormatting.ITALIC + "sets blocks");
+    	par3List.add(TextFormatting.ITALIC + "sets blocks");
     	if (stack.hasTagCompound()){
     if(whatBlockString(stack) != "null" && whatModeString(stack)!= "null"){
     	par3List.add(whatBlockString(stack) + whatModeString(stack)+ " mode");
@@ -85,7 +86,7 @@ public class ItemStaffofExpansion extends ToolBase_Default
 			//config hook
 			
 			if(ConfigurationFactory.ToolModeMesseges){  
-			ChatComponentTranslation chatmessy = new ChatComponentTranslation(EnumChatFormatting.GRAY + Messy, new Object[0]);
+			TextComponentTranslation chatmessy = new TextComponentTranslation(TextFormatting.GRAY + Messy, new Object[0]);
 			((EntityPlayer) entityLiving).addChatComponentMessage(chatmessy);
 		    }
 			
@@ -108,22 +109,25 @@ public class ItemStaffofExpansion extends ToolBase_Default
             return;
         }
 
+		IBlockState state2 = world.getBlockState(pos2);
+		Material material2 = state2.getBlock().getMaterial(state2);
+
         //Whitelist Placement
 		if (world.isAirBlock(pos2)
-        		|| world.getBlockState(pos2).getBlock().getMaterial() == Material.lava 
-        		|| world.getBlockState(pos2).getBlock().getMaterial() == Material.water
-				|| world.getBlockState(pos2).getBlock().getMaterial() == Material.plants 
-				|| world.getBlockState(pos2).getBlock().getMaterial() == Material.vine 
-				|| world.getBlockState(pos2).getBlock() == Blocks.snow_layer)
+        		|| material2 == Material.LAVA
+        		|| material2 == Material.WATER
+				|| material2 == Material.PLANTS
+				|| material2 == Material.VINE
+				|| state2.getBlock() == Blocks.SNOW_LAYER)
         {
 			//ItemStack stacky = new ItemStack (Item.getItemFromBlock(returnTBlock(thestaff)),0, returnTMeta(thestaff)); 
 			ItemStack stacky = new ItemStack (Item.getItemFromBlock(returnTBlock_FromState(thestaff)),0, returnTMeta(thestaff)); 
         	if(theplayer.capabilities.isCreativeMode || theplayer.inventory.hasItemStack(stacky))
     		{
         		//destroys and returns blocks like grass
-        		if (world.getBlockState(pos2).getBlock().getMaterial() == Material.vine
-						|| world.getBlockState(pos2).getBlock().getMaterial() == Material.plants
-						|| world.getBlockState(pos2).getBlock() == Blocks.snow_layer) 
+        		if (material2 == Material.VINE
+						|| material2 == Material.PLANTS
+						|| world.getBlockState(pos2).getBlock() == Blocks.SNOW_LAYER)
 				{
 					//(world.getBlockState(pos2)).dropBlockAsItem(world,pos2, (((Chunk) world).getBlockMetadata(x2, y2, z2)), 0);
 					//(world.getBlockState(pos2)).dropBlockAsItem();
@@ -135,9 +139,9 @@ public class ItemStaffofExpansion extends ToolBase_Default
 					(world.getBlockState(pos2).getBlock()).dropBlockAsItem(world, pos2, world.getBlockState(pos2), 0);
 				}
         		 world.playSoundEffect((double)((float)x2 + 0.5F), (double)((float)y2 + 0.5F), (double)((float)z2 + 0.5F), 
-        				 returnTBlock(thestaff).stepSound.getStepSound(), 
-        				 (returnTBlock(thestaff).stepSound.getVolume() + 1.0F) / 2.0F, 
-        				 returnTBlock(thestaff).stepSound.getFrequency() * 0.8F);
+        				 returnTBlock(thestaff).getSoundType().getStepSound(),
+        				 (returnTBlock(thestaff).getSoundType().getVolume() + 1.0F) / 2.0F,
+        				 returnTBlock(thestaff).getSoundType().getFrequency() * 0.8F);
         		 
         		//world.setBlockState(pos2, (IBlockState) Blocks.cobblestone);
         		//world.setBlock(x2, y2, z2, Blocks.air);  

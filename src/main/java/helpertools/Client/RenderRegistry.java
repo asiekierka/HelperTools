@@ -5,8 +5,8 @@ import helpertools.Common.ConfigurationFactory;
 import helpertools.Common.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 /**http://bedrockminer.jimdo.com/modding-tutorials/basic-modding-1-8/first-item/**/
 public final class RenderRegistry {
@@ -29,7 +29,7 @@ public final class RenderRegistry {
 	}
 	public static void Bakery_Advance() {
 		
-		ModelBakery.addVariantName(ItemRegistry.crossbow_tool, 
+		ModelBakery.addVariantName(ItemRegistry.crossbow_tool,
 				modid + ":" + "crossbow_item_0",
 				modid + ":" + "crossbow_item_1",
 				modid + ":" + "crossbow_item_2",

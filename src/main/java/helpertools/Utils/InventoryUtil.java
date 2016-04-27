@@ -26,12 +26,38 @@ public class InventoryUtil{
 	        
 	        return -1;
 	    }
-	  
-	  /**Attempts to remove an itemstack from the inventory (metadata senstive)**/
+
+	public static boolean hasItem(Item item, InventoryPlayer inventory)
+	{
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if (stack != null && stack.getItem() == item) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**Attempts to remove an item from the inventory **/
+	public static boolean consumeInventoryItem(Item item, InventoryPlayer inventory)
+	{
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if (stack != null && stack.getItem() == item) {
+				if (inventory.decrStackSize(i, 1) != null) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+
+	/**Attempts to remove an itemstack from the inventory (metadata senstive)**/
 	  public static boolean consumeInventoryItemStack(ItemStack stack, InventoryPlayer inventory)
 	    {
-		  //InventoryPlayer inventory = new InventoryPlayer(entity);
-		  
 	        int i = StackScan(stack, inventory);
 	        
 	        if (i < 0)

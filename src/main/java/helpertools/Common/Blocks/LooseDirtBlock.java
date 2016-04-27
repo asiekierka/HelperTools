@@ -12,7 +12,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class LooseDirtBlock extends BlockFalling
@@ -23,7 +23,7 @@ public class LooseDirtBlock extends BlockFalling
 
     public LooseDirtBlock(String unlocalizedName)
     {
-        super(Material.grass);
+        super(Material.GRASS);
         setCreativeTab(HelpTab.HelperTools);
         setUnlocalizedName(unlocalizedName);
         this.setTickRandomly(true);
@@ -61,7 +61,7 @@ public class LooseDirtBlock extends BlockFalling
 						if(!worldIn.isAirBlock(pos.down()) &&
 								!worldIn.isAirBlock(pos.down(2))){ 
     				
-        		worldIn.setBlockState(pos, Blocks.dirt.getDefaultState(), 0123);
+        		worldIn.setBlockState(pos, Blocks.DIRT.getDefaultState(), 0123);
 						}
     			}}
             //else this.checkFallable(worldIn, pos);
@@ -69,11 +69,10 @@ public class LooseDirtBlock extends BlockFalling
     }
     //uproots--crushes some nonsolid blocks below
     public boolean fall_check (World world, BlockPos pos, IBlockState state){
-    	
-    	if(world.getBlockState(pos).getBlock().getMaterial()== Material.plants
-				|| world.getBlockState(pos).getBlock().getMaterial()== Material.vine
-				|| world.getBlockState(pos).getBlock() == Blocks.snow_layer){
-		  
+        Block block = state.getBlock();
+    	Material material = block.getMaterial(state);
+
+    	if(material == Material.PLANTS || material == Material.VINE || block == Blocks.SNOW_LAYER) {
 		   (world.getBlockState(pos).getBlock()).dropBlockAsItem(world, pos, world.getBlockState(pos), 0);			
 		   world.setBlockToAir(pos);
 		   return false;}    	
@@ -127,9 +126,10 @@ public class LooseDirtBlock extends BlockFalling
     public static boolean canFallInto(World worldIn, BlockPos pos)
     {
         if (worldIn.isAirBlock(pos)) return true;
-        Block block = worldIn.getBlockState(pos).getBlock();
-        Material material = block.getMaterial();
-        return block == Blocks.fire || material == Material.air || material == Material.water || material == Material.lava;
+        IBlockState state = worldIn.getBlockState(pos);
+        Block block = state.getBlock();
+        Material material = block.getMaterial(state);
+        return block == Blocks.FIRE || material == Material.AIR || material == Material.WATER || material == Material.LAVA;
     }
     
     protected static Random growrand = new Random();
@@ -144,6 +144,6 @@ public class LooseDirtBlock extends BlockFalling
 
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        return Item.getItemFromBlock(Blocks.dirt);
+        return Item.getItemFromBlock(Blocks.DIRT);
     }
 }

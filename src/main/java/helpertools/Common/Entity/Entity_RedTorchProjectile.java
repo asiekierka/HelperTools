@@ -5,14 +5,7 @@ import helpertools.Utils.BlockStateHelper;
 import java.util.Stack;
 
 
-
-
-
-
-
-
-
-
+import helpertools.Utils.SoundUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -30,10 +23,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -110,7 +103,7 @@ public class Entity_RedTorchProjectile extends EntityThrowable{
    
    /** Called whenever the entities hitbox touches another box, being an entitie's or block. **/
    @Override
-  protected void onImpact(MovingObjectPosition mop) {
+  protected void onImpact(RayTraceResult mop) {
 	   
 	   if (this.worldObj.isRemote){ return;}
 	   if(mop.entityHit != null){
@@ -121,8 +114,8 @@ public class Entity_RedTorchProjectile extends EntityThrowable{
 	      EnumFacing sideHit = mop.sideHit; //face of a block
 	      World world = this.worldObj;
 	      BlockPos pos1 = mop.getBlockPos();
-	      Block P_Block = Blocks.redstone_torch;
-	      IBlockState P_State = Blocks.torch.getDefaultState();
+	      Block P_Block = Blocks.REDSTONE_TORCH;
+	      IBlockState P_State = Blocks.REDSTONE_TORCH.getDefaultState();
 	     
 	      
 	      Block_Impact(mop, world, pos1, sideHit, P_Block, P_State);	
@@ -132,7 +125,7 @@ public class Entity_RedTorchProjectile extends EntityThrowable{
    }
    
    /** Seperate Unit for entity processing **/
-   public void Entity_Impact(MovingObjectPosition mop){
+   public void Entity_Impact(RayTraceResult mop){
 	   
 	 //when it hits an entity do this
 	      if (mop.entityHit != null &&!(mop.entityHit instanceof EntityEnderman))
@@ -147,7 +140,7 @@ public class Entity_RedTorchProjectile extends EntityThrowable{
    }
    
    /** Seperate Unit for block impact processing **/
-   public void Block_Impact(MovingObjectPosition mop, World world, BlockPos pos1, EnumFacing sideHit, Block p_Block, IBlockState p_State) {
+   public void Block_Impact(RayTraceResult mop, World world, BlockPos pos1, EnumFacing sideHit, Block p_Block, IBlockState p_State) {
 	   BlockPos pos2 = pos1;
 	   
 	   switch(sideHit){
@@ -166,21 +159,25 @@ public class Entity_RedTorchProjectile extends EntityThrowable{
 	   default:
 		break;	   
 	   }	
-	   if(world.getBlockState(pos1).getBlock() == Blocks.tnt){
+	   if(world.getBlockState(pos1).getBlock() == Blocks.TNT){
 		   world.setBlockToAir(pos1);
 		   EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world,
 				   (double)((float)pos1.getX() + 0.5F), (double)((float)pos1.getY() + 0.5F), (double)((float)pos1.getZ() + 0.5F), getThrower());
 		   world.spawnEntityInWorld(entitytntprimed);
-		   world.playSoundAtEntity(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
+		   SoundUtil.playSoundAtEntity(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
 	   }
-	   if(world.getBlockState(pos1).getBlock().getMaterial() == Material.plants 
-				|| world.getBlockState(pos1).getBlock().getMaterial() == Material.vine 
-				|| world.getBlockState(pos1).getBlock() == Blocks.snow_layer){
+
+	   IBlockState state1 = world.getBlockState(pos1);
+	   IBlockState state2 = world.getBlockState(pos2);
+
+	   if(state1.getMaterial() == Material.PLANTS
+				|| state1.getMaterial() == Material.VINE
+				|| state1.getBlock() == Blocks.SNOW_LAYER){
 		   drop_blockItem(world, pos1);
 		   //world.setBlockState(pos1, p_State, 02);
 		   boolean flag = false;
-		   if(world.getBlockState(pos1).getBlock().getMaterial() == Material.vine
-				   && !(world.getBlockState(pos1).getBlock() == Blocks.tallgrass)){
+		   if(state1.getMaterial() == Material.VINE
+				   && !(state1.getBlock() == Blocks.TALLGRASS)){
 			   flag = true;
 		   }
 		   place_block(world, pos1, sideHit, p_Block, flag);
@@ -188,9 +185,9 @@ public class Entity_RedTorchProjectile extends EntityThrowable{
 		   return;		   
 		   
 	   }
-	   if(world.getBlockState(pos2).getBlock().getMaterial() == Material.plants 
-				|| world.getBlockState(pos2).getBlock().getMaterial() == Material.vine 
-				|| world.getBlockState(pos2).getBlock() == Blocks.snow_layer){
+	   if(state2.getMaterial() == Material.PLANTS
+				|| state2.getMaterial() == Material.VINE
+				|| state2.getBlock() == Blocks.SNOW_LAYER){
 		   drop_blockItem(world, pos2);
 		   place_block(world, pos2, sideHit, p_Block, true);
 		   this.setDead();
